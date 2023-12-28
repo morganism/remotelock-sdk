@@ -54,7 +54,8 @@ module RemoteLock
       api.post([id, 'addUserGroups'].uri_concat, group_list, 'application/json')
     end
 
-    # GET /api/v2/account/{id}/businessFunctions : Returns business functions of a specific account (user or service account).
+    # GET /api/v2/account/{id}/businessFunctions : Returns business functions of a specific account
+    # (user or service account).
     # @param id [String] user ID
     # @return [RemoteLock::Response]
     def business_functions(id)
@@ -72,7 +73,7 @@ module RemoteLock
       api.post([id, 'removeRoles'].uri_concat, role_list, 'application/json')
     end
 
-    # POST /api/v2/account/{id}/removeUserGroups : Removes specific user groups from the account (user or service account)
+    # POST /api/v2/account/{id}/removeUserGroups : Remove specific user groups from account (user or service account)
     # @param id [String] ID of the account
     # @param group_list [Array[String]] list of groups to remove
     # @return [RemoteLock::Response]
@@ -82,8 +83,8 @@ module RemoteLock
       api.post([id, 'removeUserGroups'].uri_concat, group_list, 'application/json')
     end
 
-    # POST /api/v2/account/{id}/grant/{permission} : Grants a specific permission to account (user or service account)
-    # POST /api/v2/account/grant/{permission} : Grants a specific permission to multiple accounts (users or service accounts)
+    # POST /api/v2/account/{id}/grant/{permission} : Grant specific permission to (user or service account)
+    # POST /api/v2/account/grant/{permission} : Grant specific permission to (users or service accounts)
     # @param id_list [Array[String],String] single account ID or list of account IDs
     # @param permission [String] permission group to grant to user.
     # @return [RemoteLock::Response]
@@ -91,8 +92,8 @@ module RemoteLock
       id.is_a?(String) ? grant_to_id(id, permission) : grant_to_multiple(id, permission)
     end
 
-    # POST /api/v2/account/{id}/revoke/{permission} : Revokes a specific permission from account (user or service account)
-    # POST /api/v2/account/revoke/{permission} : Revokes a specific permission from multiple accounts (users or service accounts
+    # POST /api/v2/account/{id}/revoke/{permission} : Revoke specific permission from (user or service account)
+    # POST /api/v2/account/revoke/{permission} : Revoke specific permission from multiple (users or service accounts)
     # @param id [String,Array[String]] ID of the user, or list of user IDs
     # @param permission [String] permission group to revoke from user.
     # @return [RemoteLock::Response]
