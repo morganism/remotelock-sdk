@@ -5,9 +5,11 @@ require 'json'
 require 'test/unit'
 
 module RemoteLock
+  # docs
   module API
     # API
 
+    # docs
     class Client
       # Client
 
