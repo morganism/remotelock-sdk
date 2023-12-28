@@ -6,8 +6,10 @@ require 'test/unit'
 
 module RemoteLock
   module API
+    # API
+
     class Client
-      # API Client
+      # Client
 
       def initialize(conn)
         @conn = conn
@@ -44,7 +46,7 @@ module RemoteLock
           array_X00(STATUS_CODE_SUCCESS)
         end
 
-        # stubs.get('/unused') { [STATUS_CODE_FILE_NOT_FOUND, {}, ''] } # uncomment to trigger stubs.verify_stubbed_calls failure
+        # stubs.get('/unused') { [STATUS_CODE_FILE_NOT_FOUND, {}, ''] } # trigger stubs.verify_stubbed_calls fail
 
         cli = client(stubs)
         assert_equal '127.0.0.1', cli.httpbingo('api')
@@ -84,7 +86,7 @@ module RemoteLock
         cli = client(stubs)
         assert_equal '127.0.0.1', cli.httpbingo('api', params: { abc: 123 })
 
-        # assert_equal '127.0.0.1', cli.httpbingo('api', params: { abc: 123, foo: 'Kappa' }) # uncomment to raise Stubs::NotFound
+        # assert_equal '127.0.0.1', cli.httpbingo('api', params: { abc: 123, foo: 'Kappa' }) # raise Stubs::NotFound
         stubs.verify_stubbed_calls
       end
 
