@@ -168,6 +168,7 @@ module RemoteLock
 
     def user_create(body, send_email: false)
       raise ArgumentError unless body.is_a?(Hash)
+
       uri = send_email ? "?sendEmail=#{send_email}" : 'user'
       api.post(uri, body, 'application/json')
     end
@@ -182,7 +183,9 @@ module RemoteLock
     # @return [RemoteLock::Response]
     def user_update(body, modify: true)
       raise ArgumentError unless body.is_a?(Hash)
+
       return api.post('user', body, 'application/json') unless modify
+
       api.post('user',
                hash_for_update(describe(id).response, body),
                'application/json')
@@ -206,6 +209,7 @@ module RemoteLock
     def user_invite(body)
       raise ArgumentError unless body.is_a?(Array)
       raise ArgumentError unless body.first.is_a?(Hash)
+
       api.post('user/invite', body, 'application/json')
     end
 
@@ -216,6 +220,7 @@ module RemoteLock
     # @return [RemoteLock::Response]
     def validate_accounts(id_list)
       raise ArgumentError unless id_list.is_a?(Array)
+
       api.post('validateAccounts', id_list, 'application/json')
     end
 
