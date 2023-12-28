@@ -100,8 +100,7 @@ module RemoteLock
       id.is_a?(String) ? revoke_from_id(id, permission) : revoke_from_multiple(id, permission)
     end
 
-    # POST /api/v2/account/addingestionpolicy
-    # Add a specific ingestion policy to multiple accounts
+    # POST /api/v2/account/addingestionpolicy : Add a specific ingestion policy to multiple accounts
     # @param policy_id [String] ID of the ingestion policy
     # @param id_list [Array[String]] list of accounts to be put in policy
     # @return [RemoteLock::Response]
@@ -111,8 +110,7 @@ module RemoteLock
       api.post('addingestionpolicy', { ingestionPolicyId: policy_id, accounts: id_list }, 'application/json')
     end
 
-    # POST /api/v2/account/removeingestionpolicies
-    # Removes ingestion policies from multiple accounts. The API path says
+    # POST /api/v2/account/removeingestionpolicies : Removes ingestion policies from multiple accounts. The API path says
     # "policies" but I've made the method name "policy" for consistency.
     # @param policy_id [String] ID of the ingestion policy
     # @param id_list [Array[String]] list of accounts to be put in policy
@@ -123,8 +121,7 @@ module RemoteLock
       api.post('removeingestionpolicies', { ingestionPolicyId: policy_id, accounts: id_list }, 'application/json')
     end
 
-    # POST /api/v2/account/deleteAccounts
-    # Deletes multiple accounts (users or service accounts)
+    # POST /api/v2/account/deleteAccounts : Deletes multiple accounts (users or service accounts)
     # @param id [String] ID of the account
     # @param group_list [Array[String]] list of accounts to delete
     # @return [RemoteLock::Response]
@@ -133,8 +130,7 @@ module RemoteLock
       api.post('deleteAccounts', id_list, 'application/json')
     end
 
-    # GET /api/v2/account/user
-    # Get all user accounts
+    # GET /api/v2/account/user : Get all user accounts
     # @param offset [Int] user account at which the list begins
     # @param limit [Int] the number of user accounts to return
     # @return [RemoteLock::Response]
@@ -149,8 +145,7 @@ module RemoteLock
       api.post(uri, body, 'application/json')
     end
 
-    # POST /api/v2/account/user
-    # Creates or updates a user account
+    # POST /api/v2/account/user : Creates or updates a user account
     # @param id [String] a RemoteLock user ID
     # @param body [Hash] key-value hash of the parameters you wish to change
     # @param modify [true, false] if true, use {#describe()} to get a hash
@@ -164,8 +159,7 @@ module RemoteLock
       api.post('user', hash_for_update(describe(id).response, body), 'application/json')
     end
 
-    # GET /api/v2/account/user/{id}
-    # Retrieves a user by identifier (email address)
+    # GET /api/v2/account/user/{id} : Retrieves a user by identifier (email address)
     # @param id [String] ID of the proxy
     # @return [RemoteLock::Response]
     def user_describe(id)
@@ -173,8 +167,7 @@ module RemoteLock
       api.get(['user', id].uri_concat)
     end
 
-    # POST /api/v2/account/user/invite
-    # Invite user accounts with given user groups and permissions.
+    # POST /api/v2/account/user/invite : Invite user accounts with given user groups and permissions.
     # @param body [Array[Hash]] array of hashes, each hash describing a user.
     #   See API docs for more details. It is your responsibility to validate the data which describes each user.
     # @return [RemoteLock::Response]
@@ -185,8 +178,7 @@ module RemoteLock
       api.post('user/invite', body, 'application/json')
     end
 
-    # POST /api/v2/account/validateAccounts
-    # Returns valid accounts (users and service accounts), also invalid identifiers from the given list
+    # POST /api/v2/account/validateAccounts : Returns valid accounts (users and service accounts), also invalid identifiers from the given list
     # @param id_list [Array[String]] list of user IDs
     # @return [RemoteLock::Response]
     def validate_accounts(id_list)
