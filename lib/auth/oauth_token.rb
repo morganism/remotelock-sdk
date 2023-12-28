@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 require 'faraday'
 require 'json'
 require 'test/unit'
 
 module RemoteLock
   module API
-
     class Client
       def initialize(conn)
         @conn = conn
