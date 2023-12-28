@@ -4,9 +4,8 @@ require_relative 'core/api'
 require_relative 'api_mixins/user'
 
 module RemoteLock
-  # Manage and query RemoteLock accounts. '/account/serviceaccount' API paths are covered in
-  # the RemoteLock::ServiceAccount class. Many of these methods are duplicated in the User class.
-  # This reflects the layout of the API.
+  # Manage and query RemoteLock accounts. '/account/serviceaccount' API paths are covered in the
+  #  RemoteLock::ServiceAccount class. Some  methods are duplicated in the User class.
   class Account < CoreApi
     include RemoteLock::Mixin::User
 
