@@ -45,7 +45,8 @@ module RemoteLock
     # @return [URI::HTTPS]
     #
     def mk_conn(path, headers = {}, opts = {})
-      url = format('%<scheme>s://%<endpoint>s%<path>s', scheme: net[:scheme], endpoint: net[:endpoint], path: [net[:api_base], path].uri_concat)
+      url = format('%<scheme>s://%<endpoint>s%<path>s', scheme: net[:scheme],
+        endpoint: net[:endpoint], path: [net[:api_base], path].uri_concat)
       set_opts = { url: Addressable::URI.encode(url), headers: net[:headers].merge(headers) }
       Faraday.new(set_opts.merge(opts))
     end
@@ -166,9 +167,7 @@ module RemoteLock
     def verbosity(conn, method, *args)
       return unless noop || verbose
 
-      log format('uri: %<method>s %<path>s',
-                 method: method.upcase,
-                 path: conn.url_prefix)
+      log format('uri: %<method>s %<path>s', method: method.upcase, path: conn.url_prefix)
 
       return unless args.last && !args.last.empty?
 
@@ -179,8 +178,7 @@ module RemoteLock
 
     def paginator_class(method)
       require_relative File.join('..', 'paginator', method.to_s)
-      Object.const_get(format('RemoteLock::Paginator::%<method>s',
-                              method: method.to_s.capitalize))
+      Object.const_get(format('RemoteLock::Paginator::%<method>s', method: method.to_s.capitalize))
     end
 
     # A dispatcher for making API calls. We now have three methods that do the real call,
@@ -217,10 +215,7 @@ module RemoteLock
 
       creds[:agent] = "remotelock-sdk #{RL_SDK_VERSION}" unless creds.key?(:agent) && creds[:agent]
 
-      @net = { headers: headers(creds),
-               scheme: opts[:scheme] || 'https',
-               endpoint: creds[:endpoint],
-               api_base: calling_class.api_path }
+      @net = { headers: headers(creds), scheme: opts[:scheme] || 'https', endpoint: creds[:endpoint], api_base: calling_class.api_path }
     end
 
     def headers(creds)
