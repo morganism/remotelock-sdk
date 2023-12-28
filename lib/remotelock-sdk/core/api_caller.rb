@@ -45,12 +45,8 @@ module RemoteLock
     # @return [URI::HTTPS]
     #
     def mk_conn(path, headers = {}, opts = {})
-      url = format('%<scheme>s://%<endpoint>s%<path>s',
-                   scheme: net[:scheme],
-                   endpoint: net[:endpoint],
-                   path: [net[:api_base], path].uri_concat)
-      set_opts = { url: Addressable::URI.encode(url),
-                   headers: net[:headers].merge(headers) }
+      url = format('%<scheme>s://%<endpoint>s%<path>s', scheme: net[:scheme], endpoint: net[:endpoint], path: [net[:api_base], path].uri_concat)
+      set_opts = { url: Addressable::URI.encode(url), headers: net[:headers].merge(headers) }
       Faraday.new(set_opts.merge(opts))
     end
 
@@ -127,9 +123,7 @@ module RemoteLock
     #
     def post(path, body = nil, ctype = 'text/plain')
       body = body.to_json unless body.is_a?(String)
-      make_call(mk_conn(path,  'Content-Type': ctype,
-                               Accept: 'application/json'),
-                :post, nil, body)
+      make_call(mk_conn(path,  'Content-Type': ctype, Accept: 'application/json'), :post, nil, body)
     end
 
     # Make a PUT call to the RemoteLock API and return the result as a Ruby hash.
@@ -141,9 +135,7 @@ module RemoteLock
     # @return [Hash] API response
     #
     def put(path, body = nil, ctype = 'application/json')
-      make_call(mk_conn(path,  'Content-Type': ctype,
-                               Accept: 'application/json'),
-                :put, nil, body.to_json)
+      make_call(mk_conn(path,  'Content-Type': ctype, Accept: 'application/json'), :put, nil, body.to_json)
     end
 
     # Make a DELETE call to the RemoteLock API and return the result as a Ruby hash.
@@ -162,11 +154,7 @@ module RemoteLock
     # @return [String] body of response (JSON)
     #
     def respond(resp)
-      body = if calling_class.respond_to?(:response_shim)
-               calling_class.response_shim(resp.body, resp.status)
-             else
-               resp.body
-             end
+      body = calling_class.respond_to?(:response_shim) ? calling_class.response_shim(resp.body, resp.status) : resp.body
 
       return body if opts[:raw_response]
 
