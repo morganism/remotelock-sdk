@@ -139,6 +139,7 @@ module RemoteLock
       end
     end
 
+    # docs
     class Auth
       attr_reader :client_id, :client_secret
 
