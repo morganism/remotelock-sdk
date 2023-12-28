@@ -45,7 +45,8 @@ module RemoteLock
     # @return [URI::HTTPS]
     #
     def mk_conn(path, headers = {}, opts = {})
-      url = format('%<scheme>s://%<endpoint>s%<path>s', scheme: net[:scheme], endpoint: net[:endpoint], path: [net[:api_base], path].uri_concat)
+      url = format('%<scheme>s://%<endpoint>s%<path>s', scheme: net[:scheme], endpoint: net[:endpoint],
+        path: [net[:api_base], path].uri_concat)
       set_opts = { url: Addressable::URI.encode(url), headers: net[:headers].merge(headers) }
       Faraday.new(set_opts.merge(opts))
     end
