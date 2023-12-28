@@ -10,8 +10,7 @@ module RemoteLock
   class Account < CoreApi
     include RemoteLock::Mixin::User
 
-    # GET /api/v2/account
-    # Get all accounts (users and service accounts) of a customer
+    # GET /api/v2/account : Get all accounts (users and service accounts) of a customer
     # @param offset [Int] account at which the list begins
     # @param limit [Int] the number of accounts to return
     # @return [RemoteLock::Response]
@@ -19,8 +18,7 @@ module RemoteLock
       api.get('', offset: offset, limit: limit)
     end
 
-    # DELETE /api/v2/account/{id}
-    # Deletes an account (user or service account) identified by id
+    # DELETE /api/v2/account/{id} : Deletes an account (user or service account) identified by id
     # @param id [String] ID of the account
     # @return [RemoteLock::Response]
     def delete(id)
@@ -28,8 +26,7 @@ module RemoteLock
       api.delete(id)
     end
 
-    # GET /api/v2/account/{id}
-    # Get a specific account (user or service account)
+    # GET /api/v2/account/{id} : Get a specific account (user or service account)
     # @param id [String] ID of the proxy
     # @return [RemoteLock::Response]
     def describe(id)
@@ -37,8 +34,7 @@ module RemoteLock
       api.get(id)
     end
 
-    # POST /api/v2/account/{id}/addRoles
-    # Add specific roles to the account (user or service account)
+    # POST /api/v2/account/{id}/addRoles : Add specific roles to the account (user or service account)
     # @param id [String] ID of the account
     # @param role_list [Array[String]] list of roles to add
     # @return [RemoteLock::Response]
@@ -48,21 +44,17 @@ module RemoteLock
       api.post([id, 'addRoles'].uri_concat, role_list, 'application/json')
     end
 
-    # POST /api/v2/account/{id}/addUserGroups
-    # Adds specific user groups to the account (user or service account)
+    # POST /api/v2/account/{id}/addUserGroups : Adds specific user groups to the account (user or service account)
     # @param id [String] ID of the account
     # @param group_list [Array[String]] list of groups to add
     # @return [RemoteLock::Response]
     def add_user_groups(id, group_list)
       wf_account_id?(id)
       validate_usergroup_list(group_list)
-      api.post([id, 'addUserGroups'].uri_concat, group_list,
-               'application/json')
+      api.post([id, 'addUserGroups'].uri_concat, group_list, 'application/json')
     end
 
-    # GET /api/v2/account/{id}/businessFunctions
-    # Returns business functions of a specific account (user or service
-    # account).
+    # GET /api/v2/account/{id}/businessFunctions : Returns business functions of a specific account (user or service account).
     # @param id [String] user ID
     # @return [RemoteLock::Response]
     def business_functions(id)
@@ -70,8 +62,7 @@ module RemoteLock
       api.get([id, 'businessFunctions'].uri_concat)
     end
 
-    # POST /api/v2/account/{id}/removeRoles
-    # Removes specific roles from the account (user or service account)
+    # POST /api/v2/account/{id}/removeRoles : Removes specific roles from the account (user or service account)
     # @param id [String] ID of the account
     # @param role_list [Array[String]] list of roles to remove
     # @return [RemoteLock::Response]
@@ -81,36 +72,27 @@ module RemoteLock
       api.post([id, 'removeRoles'].uri_concat, role_list, 'application/json')
     end
 
-    # POST /api/v2/account/{id}/removeUserGroups
-    # Removes specific user groups from the account (user or service account)
+    # POST /api/v2/account/{id}/removeUserGroups : Removes specific user groups from the account (user or service account)
     # @param id [String] ID of the account
     # @param group_list [Array[String]] list of groups to remove
     # @return [RemoteLock::Response]
     def remove_user_groups(id, group_list)
       wf_account_id?(id)
       validate_usergroup_list(group_list)
-      api.post([id, 'removeUserGroups'].uri_concat, group_list,
-               'application/json')
+      api.post([id, 'removeUserGroups'].uri_concat, group_list, 'application/json')
     end
 
-    # POST /api/v2/account/{id}/grant/{permission}
-    # Grants a specific permission to account (user or service account)
-    # POST /api/v2/account/grant/{permission}
-    # Grants a specific permission to multiple accounts (users or service
-    # accounts)
-    # @param id_list [Array[String],String] single account ID or list of
-    #   account IDs
+    # POST /api/v2/account/{id}/grant/{permission} : Grants a specific permission to account (user or service account)
+    # POST /api/v2/account/grant/{permission} : Grants a specific permission to multiple accounts (users or service accounts)
+    # @param id_list [Array[String],String] single account ID or list of account IDs
     # @param permission [String] permission group to grant to user.
     # @return [RemoteLock::Response]
     def grant(id, permission)
       id.is_a?(String) ? grant_to_id(id, permission) : grant_to_multiple(id, permission)
     end
 
-    # POST /api/v2/account/{id}/revoke/{permission}
-    # Revokes a specific permission from account (user or service account)
-    # POST /api/v2/account/revoke/{permission}
-    # Revokes a specific permission from multiple accounts (users or service
-    # accounts
+    # POST /api/v2/account/{id}/revoke/{permission} : Revokes a specific permission from account (user or service account)
+    # POST /api/v2/account/revoke/{permission} : Revokes a specific permission from multiple accounts (users or service accounts
     # @param id [String,Array[String]] ID of the user, or list of user IDs
     # @param permission [String] permission group to revoke from user.
     # @return [RemoteLock::Response]
@@ -126,10 +108,7 @@ module RemoteLock
     def add_ingestion_policy(policy_id, id_list)
       wf_ingestionpolicy_id?(policy_id)
       validate_account_list(id_list)
-      api.post('addingestionpolicy',
-               { ingestionPolicyId: policy_id,
-                 accounts: id_list },
-               'application/json')
+      api.post('addingestionpolicy', { ingestionPolicyId: policy_id, accounts: id_list }, 'application/json')
     end
 
     # POST /api/v2/account/removeingestionpolicies
@@ -141,10 +120,7 @@ module RemoteLock
     def remove_ingestion_policy(policy_id, id_list)
       wf_ingestionpolicy_id?(policy_id)
       validate_account_list(id_list)
-      api.post('removeingestionpolicies',
-               { ingestionPolicyId: policy_id,
-                 accounts: id_list },
-               'application/json')
+      api.post('removeingestionpolicies', { ingestionPolicyId: policy_id, accounts: id_list }, 'application/json')
     end
 
     # POST /api/v2/account/deleteAccounts
@@ -178,17 +154,14 @@ module RemoteLock
     # @param id [String] a RemoteLock user ID
     # @param body [Hash] key-value hash of the parameters you wish to change
     # @param modify [true, false] if true, use {#describe()} to get a hash
-    #   describing the existing object, and modify that with the new body. If
-    #   false, pass the new body straight through.
+    #   describing the existing object, and modify that with the new body. If false, pass the new body straight through.
     # @return [RemoteLock::Response]
     def user_update(body, modify: true)
       raise ArgumentError unless body.is_a?(Hash)
 
       return api.post('user', body, 'application/json') unless modify
 
-      api.post('user',
-               hash_for_update(describe(id).response, body),
-               'application/json')
+      api.post('user', hash_for_update(describe(id).response, body), 'application/json')
     end
 
     # GET /api/v2/account/user/{id}
@@ -203,8 +176,7 @@ module RemoteLock
     # POST /api/v2/account/user/invite
     # Invite user accounts with given user groups and permissions.
     # @param body [Array[Hash]] array of hashes, each hash describing a user.
-    #   See API docs for more details. It is your responsibility to validate
-    #   the data which describes each user.
+    #   See API docs for more details. It is your responsibility to validate the data which describes each user.
     # @return [RemoteLock::Response]
     def user_invite(body)
       raise ArgumentError unless body.is_a?(Array)
@@ -214,8 +186,7 @@ module RemoteLock
     end
 
     # POST /api/v2/account/validateAccounts
-    # Returns valid accounts (users and service accounts), also invalid
-    # identifiers from the given list
+    # Returns valid accounts (users and service accounts), also invalid identifiers from the given list
     # @param id_list [Array[String]] list of user IDs
     # @return [RemoteLock::Response]
     def validate_accounts(id_list)
