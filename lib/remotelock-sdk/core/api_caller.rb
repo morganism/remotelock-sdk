@@ -36,10 +36,8 @@ module RemoteLock
       @debug     = opts[:debug] || false
     end
 
-    # Create a Faraday connection object. The server comes from the
-    # endpoint passed to the initializer in the 'creds' hash; the
-    # root of the URI is dynamically derived by the #setup_endpoint
-    # method.
+    # Create a Faraday connection object. The server comes from the endpoint passed to the initializer
+    # in the 'creds' hash; the root of the URI is dynamically derived by the #setup_endpoint method.
     #
     # @param path [String] uri path
     # @param headers [Hash] additional headers
@@ -56,8 +54,7 @@ module RemoteLock
       Faraday.new(set_opts.merge(opts))
     end
 
-    # Make a GET call to the RemoteLock API and return the result as
-    # a Ruby hash.
+    # Make a GET call to the RemoteLock API and return the result as a Ruby hash.
     #
     # @param path [String] path to be appended to the
     #   #net[:api_base] path.
@@ -71,11 +68,9 @@ module RemoteLock
       make_call(mk_conn(path, {}), :get, nil, query)
     end
 
-    # Had to introduce this for the RemoteLock::Dashboard#acls
-    # method, which uses a query string of multiple id=s. By default
-    # Faraday only uses the last one. You must set the
-    # `params_encoder`. Rather than convolute the existing logic, it
-    # was cleaner to add this method. Parameters are same as #get.
+    # Had to introduce this for the RemoteLock::Dashboard#acls method, which uses a query string of multiple id=s. 
+    # By default Faraday only uses the last one. You must set the `params_encoder`. Rather than convolute the existing logic, 
+    # it was cleaner to add this method. Parameters are same as get.
     #
     def get_flat_params(path, query = {})
       make_call(flat_param_conn(path, query), :get)

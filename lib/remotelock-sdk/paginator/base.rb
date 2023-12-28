@@ -161,7 +161,7 @@ module RemoteLock
             offset += page_size
             api_caller.verbosity(conn, method, *p_args)
             resp = api_caller.respond(conn.public_send(method, *p_args))
-            
+
             raise(RemoteLock::Exception::EnumerableError, resp.status) unless resp.ok?
 
             p_args = set_pagination(offset, page_size, p_args)
