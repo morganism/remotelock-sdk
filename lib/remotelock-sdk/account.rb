@@ -4,8 +4,7 @@ require_relative 'core/api'
 require_relative 'api_mixins/user'
 
 module RemoteLock
-  # Manage and query RemoteLock accounts. '/account/serviceaccount' API paths are covered in the
-  #  RemoteLock::ServiceAccount class. Some  methods are duplicated in the User class.
+  # Manage and query RemoteLock accounts. '/account/serviceaccount' API paths in the RemoteLock::ServiceAccount
   class Account < CoreApi
     include RemoteLock::Mixin::User
 
@@ -53,8 +52,7 @@ module RemoteLock
       api.post([id, 'addUserGroups'].uri_concat, group_list, 'application/json')
     end
 
-    # GET /api/v2/account/{id}/businessFunctions : Returns business functions of a specific account
-    # (user or service account).
+    # GET /api/v2/account/{id}/businessFunctions : Return business functions of specific (user or service account).
     # @param id [String] user ID
     # @return [RemoteLock::Response]
     def business_functions(id)
