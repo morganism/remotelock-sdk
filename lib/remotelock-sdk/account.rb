@@ -178,7 +178,7 @@ module RemoteLock
       api.post('user/invite', body, 'application/json')
     end
 
-    # POST /api/v2/account/validateAccounts : Return valid (users and service accounts) invalid identifiers from given list
+    # POST /api/v2/account/validateAccounts : Return valid (users and service accounts) invalid identifiers from list
     # @param id_list [Array[String]] list of user IDs
     # @return [RemoteLock::Response]
     def validate_accounts(id_list)
