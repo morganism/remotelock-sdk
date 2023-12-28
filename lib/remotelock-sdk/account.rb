@@ -13,13 +13,12 @@ module RemoteLock
   #
   class Account < CoreApi
     include RemoteLock::Mixin::User
-    #
+    
     # GET /api/v2/account
     # Get all accounts (users and service accounts) of a customer
     # @param offset [Int] account at which the list begins
     # @param limit [Int] the number of accounts to return
     # @return [RemoteLock::Response]
-    #
     def list(offset = 0, limit = 100)
       api.get('', offset: offset, limit: limit)
     end
@@ -28,7 +27,6 @@ module RemoteLock
     # Deletes an account (user or service account) identified by id
     # @param id [String] ID of the account
     # @return [RemoteLock::Response]
-    #
     def delete(id)
       wf_account_id?(id)
       api.delete(id)
@@ -38,7 +36,6 @@ module RemoteLock
     # Get a specific account (user or service account)
     # @param id [String] ID of the proxy
     # @return [RemoteLock::Response]
-    #
     def describe(id)
       wf_account_id?(id)
       api.get(id)
@@ -49,7 +46,6 @@ module RemoteLock
     # @param id [String] ID of the account
     # @param role_list [Array[String]] list of roles to add
     # @return [RemoteLock::Response]
-    #
     def add_roles(id, role_list)
       wf_account_id?(id)
       validate_role_list(role_list)
@@ -116,11 +112,7 @@ module RemoteLock
     # @return [RemoteLock::Response]
     #
     def grant(id, permission)
-      if id.is_a?(String)
-        grant_to_id(id, permission)
-      else
-        grant_to_multiple(id, permission)
-      end
+      (id.is_a?(String)) ? grant_to_id(id, permission) : grant_to_multiple(id, permission)
     end
 
     # POST /api/v2/account/{id}/revoke/{permission}
@@ -133,11 +125,7 @@ module RemoteLock
     # @return [RemoteLock::Response]
     #
     def revoke(id, permission)
-      if id.is_a?(String)
-        revoke_from_id(id, permission)
-      else
-        revoke_from_multiple(id, permission)
-      end
+      (id.is_a?(String)) ?  revoke_from_id(id, permission) : revoke_from_multiple(id, permission)
     end
 
     # POST /api/v2/account/addingestionpolicy

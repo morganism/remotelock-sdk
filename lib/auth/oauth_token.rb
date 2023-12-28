@@ -144,7 +144,7 @@ module RemoteLock
     class Auth
       attr_reader :client_id, :client_secret
 
-      def initialize (options = {})
+      def initialize(options = {})
         @client_id = options[:client_id]
         @client_secret = options[:client_secret]
       end
