@@ -29,7 +29,7 @@ module RemoteLock
     class ClientTest < Test::Unit::TestCase
       STATUS_CODE_SUCCESS = 200
       STATUS_CODE_FILE_NOT_FOUND = 404
-      def array_X00(status_code)
+      def array_x00(status_code)
         [
           status_code,
           { 'Content-Type': 'application/javascript' },
