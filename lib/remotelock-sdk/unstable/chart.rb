@@ -38,9 +38,7 @@ module RemoteLock
 
         # resp.more_items? doesn't work: we don't get that from this API
 
-        if metrics.size == limit
-          metrics += metrics_under(path, metrics.last, limit).response.items
-        end
+        metrics += metrics_under(path, metrics.last, limit).response.items if metrics.size == limit
 
         resp.response.items = metrics.sort
         resp
