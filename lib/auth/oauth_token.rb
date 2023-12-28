@@ -7,6 +7,8 @@ require 'test/unit'
 module RemoteLock
   module API
     class Client
+      # API Client
+
       def initialize(conn)
         @conn = conn
       end
@@ -25,20 +27,24 @@ module RemoteLock
 
     # Example API client test
     class ClientTest < Test::Unit::TestCase
+      STATUS_CODE_SUCCESS = 200
+      STATUS_CODE_FILE_NOT_FOUND = 404
+      def array_X00(status_code)
+        [
+          status_code,
+          { 'Content-Type': 'application/javascript' },
+          status_code == STATUS_CODE_SUCCESS ? '{"origin": "127.0.0.1"}' : '{}'
+        ]
+      end
+
       def test_httpbingo_name
         stubs = Faraday::Adapter::Test::Stubs.new
         stubs.get('/api') do |env|
-          # optional: you can inspect the Faraday::Env
           assert_equal '/api', env.url.path
-          [
-            200,
-            { 'Content-Type': 'application/javascript' },
-            '{"origin": "127.0.0.1"}'
-          ]
+          array_X00(STATUS_CODE_SUCCESS)
         end
 
-        # uncomment to trigger stubs.verify_stubbed_calls failure
-        # stubs.get('/unused') { [404, {}, ''] }
+        # stubs.get('/unused') { [STATUS_CODE_FILE_NOT_FOUND, {}, ''] } # uncomment to trigger stubs.verify_stubbed_calls failure
 
         cli = client(stubs)
         assert_equal '127.0.0.1', cli.httpbingo('api')
@@ -48,11 +54,7 @@ module RemoteLock
       def test_httpbingo_not_found
         stubs = Faraday::Adapter::Test::Stubs.new
         stubs.get('/api') do
-          [
-            404,
-            { 'Content-Type': 'application/javascript' },
-            '{}'
-          ]
+          array_X00(STATUS_CODE_FILE_NOT_FOUND)
         end
 
         cli = client(stubs)
@@ -76,30 +78,22 @@ module RemoteLock
       def test_strict_mode
         stubs = Faraday::Adapter::Test::Stubs.new(strict_mode: true)
         stubs.get('/api?abc=123') do
-          [
-            200,
-            { 'Content-Type': 'application/javascript' },
-            '{"origin": "127.0.0.1"}'
-          ]
+          array_X00(STATUS_CODE_SUCCESS)
         end
 
         cli = client(stubs)
         assert_equal '127.0.0.1', cli.httpbingo('api', params: { abc: 123 })
 
-        # uncomment to raise Stubs::NotFound
-        # assert_equal '127.0.0.1', cli.httpbingo('api', params: { abc: 123, foo: 'Kappa' })
+        # assert_equal '127.0.0.1', cli.httpbingo('api', params: { abc: 123, foo: 'Kappa' }) # uncomment to raise Stubs::NotFound
         stubs.verify_stubbed_calls
       end
 
       def test_non_default_params_encoder
         stubs = Faraday::Adapter::Test::Stubs.new(strict_mode: true)
         stubs.get('/api?a=x&a=y&a=z') do
-          [
-            200,
-            { 'Content-Type': 'application/javascript' },
-            '{"origin": "127.0.0.1"}'
-          ]
+          array_X00(STATUS_CODE_SUCCESS)
         end
+
         conn = Faraday.new(request: { params_encoder: Faraday::FlatParamsEncoder }) do |builder|
           builder.adapter :test, stubs
         end
@@ -114,10 +108,10 @@ module RemoteLock
 
       def test_with_string_body
         stubs = Faraday::Adapter::Test::Stubs.new do |stub|
-          stub.post('/foo', '{"name":"YK"}') { [200, {}, ''] }
+          stub.post('/foo', '{"name":"YK"}') { [STATUS_CODE_SUCCESS, {}, ''] }
         end
         cli = client(stubs)
-        assert_equal 200, cli.foo(name: 'YK')
+        assert_equal STATUS_CODE_SUCCESS, cli.foo(name: 'YK')
 
         stubs.verify_stubbed_calls
       end
@@ -125,10 +119,10 @@ module RemoteLock
       def test_with_proc_body
         stubs = Faraday::Adapter::Test::Stubs.new do |stub|
           check = ->(request_body) { JSON.parse(request_body).slice('name') == { 'name' => 'YK' } }
-          stub.post('/foo', check) { [200, {}, ''] }
+          stub.post('/foo', check) { [STATUS_CODE_SUCCESS, {}, ''] }
         end
         cli = client(stubs)
-        assert_equal 200, cli.foo(name: 'YK', created_at: Time.now)
+        assert_equal STATUS_CODE_SUCCESS, cli.foo(name: 'YK', created_at: Time.now)
 
         stubs.verify_stubbed_calls
       end
