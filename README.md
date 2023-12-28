@@ -89,9 +89,6 @@ rl.list(99, :lazy).each { |access_user| puts access_user.show }
 # ...
 ```
 
-# SDK INFO: !M 1548634226 #4 10.0 #4 8.0 #1 9.0 my.dist source=box
-```
-
 ## Contributing
 
 Fork it, fix it, send me a PR. Please supply tests, and try to keep
