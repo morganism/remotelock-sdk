@@ -13,7 +13,7 @@ module RemoteLock
   #
   class Account < CoreApi
     include RemoteLock::Mixin::User
-    
+
     # GET /api/v2/account
     # Get all accounts (users and service accounts) of a customer
     # @param offset [Int] account at which the list begins
@@ -112,7 +112,7 @@ module RemoteLock
     # @return [RemoteLock::Response]
     #
     def grant(id, permission)
-      (id.is_a?(String)) ? grant_to_id(id, permission) : grant_to_multiple(id, permission)
+      id.is_a?(String) ? grant_to_id(id, permission) : grant_to_multiple(id, permission)
     end
 
     # POST /api/v2/account/{id}/revoke/{permission}
@@ -125,7 +125,7 @@ module RemoteLock
     # @return [RemoteLock::Response]
     #
     def revoke(id, permission)
-      (id.is_a?(String)) ?  revoke_from_id(id, permission) : revoke_from_multiple(id, permission)
+      id.is_a?(String) ? revoke_from_id(id, permission) : revoke_from_multiple(id, permission)
     end
 
     # POST /api/v2/account/addingestionpolicy
@@ -180,7 +180,7 @@ module RemoteLock
       api.get('user', offset: offset, limit: limit)
     end
 
-    def user_create(body, send_email = false)
+    def user_create(body, send_email: false)
       raise ArgumentError unless body.is_a?(Hash)
 
       uri = send_email ? "?sendEmail=#{send_email}" : 'user'
@@ -196,7 +196,7 @@ module RemoteLock
     #   describing the existing object, and modify that with the new body. If
     #   false, pass the new body straight through.
     # @return [RemoteLock::Response]
-    def user_update(body, modify = true)
+    def user_update(body, modify: true)
       raise ArgumentError unless body.is_a?(Hash)
 
       return api.post('user', body, 'application/json') unless modify
