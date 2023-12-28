@@ -110,7 +110,7 @@ module RemoteLock
       api.post('addingestionpolicy', { ingestionPolicyId: policy_id, accounts: id_list }, 'application/json')
     end
 
-    # POST /api/v2/account/removeingestionpolicies : Removes ingestion policies from multiple accounts. The API path says
+    # POST /api/v2/account/removeingestionpolicies : Remove ingestion policies from multiple accounts. The API path says
     # "policies" but I've made the method name "policy" for consistency.
     # @param policy_id [String] ID of the ingestion policy
     # @param id_list [Array[String]] list of accounts to be put in policy
@@ -178,7 +178,7 @@ module RemoteLock
       api.post('user/invite', body, 'application/json')
     end
 
-    # POST /api/v2/account/validateAccounts : Returns valid accounts (users and service accounts), also invalid identifiers from the given list
+    # POST /api/v2/account/validateAccounts : Return valid (users and service accounts) invalid identifiers from given list
     # @param id_list [Array[String]] list of user IDs
     # @return [RemoteLock::Response]
     def validate_accounts(id_list)
