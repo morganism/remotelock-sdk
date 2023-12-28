@@ -238,7 +238,7 @@ module RemoteLock
       validate_credentials(creds)
 
       unless creds.key?(:agent) && creds[:agent]
-        creds[:agent] = "wavefront-sdk #{RL_SDK_VERSION}"
+        creds[:agent] = "remotelock-sdk #{RL_SDK_VERSION}"
       end
 
       @net = { headers: headers(creds),

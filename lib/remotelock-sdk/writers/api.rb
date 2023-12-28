@@ -58,7 +58,7 @@ module RemoteLock
       #
       def _send_point(body)
         body.each_slice(100) do |p|
-          conn.post('/?f=wavefront', p.join("\n"), 'application/octet-stream')
+          conn.post('/?f=remotelock', p.join("\n"), 'application/octet-stream')
         end
       end
     end

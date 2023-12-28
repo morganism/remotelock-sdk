@@ -1,12 +1,12 @@
-# wavefront-sdk
-[![Test](https://github.com/snltd/wavefront-sdk/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/snltd/wavefront-sdk/actions/workflows/test.yml) [![Release](https://github.com/snltd/wavefront-sdk/actions/workflows/release.yml/badge.svg?branch=master)](https://github.com/snltd/wavefront-sdk/actions/workflows/release.yml) [![Code Climate](https://codeclimate.com/github/snltd/wavefront-sdk/badges/gpa.svg)](https://codeclimate.com/github/snltd/wavefront-sdk) [![Issue Count](https://codeclimate.com/github/snltd/wavefront-sdk/badges/issue_count.svg)](https://codeclimate.com/github/snltd/wavefront-sdk) [![Gem Version](https://badge.fury.io/rb/wavefront-sdk.svg)](https://badge.fury.io/rb/wavefront-sdk) ![](http://ruby-gem-downloads-badge.herokuapp.com/wavefront-sdk?type=total)
+# remotelock-sdk
+[![Test](https://github.com/snltd/remotelock-sdk/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/snltd/remotelock-sdk/actions/workflows/test.yml) [![Release](https://github.com/snltd/remotelock-sdk/actions/workflows/release.yml/badge.svg?branch=master)](https://github.com/snltd/remotelock-sdk/actions/workflows/release.yml) [![Code Climate](https://codeclimate.com/github/snltd/remotelock-sdk/badges/gpa.svg)](https://codeclimate.com/github/snltd/remotelock-sdk) [![Issue Count](https://codeclimate.com/github/snltd/remotelock-sdk/badges/issue_count.svg)](https://codeclimate.com/github/snltd/remotelock-sdk) [![Gem Version](https://badge.fury.io/rb/remotelock-sdk.svg)](https://badge.fury.io/rb/remotelock-sdk) ![](http://ruby-gem-downloads-badge.herokuapp.com/remotelock-sdk?type=total)
 
 This is a Ruby SDK for v2 of
-[Wavefront](https://www.wavefront.com/)'s public API. It aims to be
+[Remotelock](https://www.remotelock.com/)'s public API. It aims to be
 more lightweight, consistent, simple, and convenient than an
 auto-generated SDK.
 
-As well as complete API coverage, `wavefront-sdk` includes methods
+As well as complete API coverage, `remotelock-sdk` includes methods
 which facilitate various common tasks, and provides non-API
 features such as credential management, and writing points through a
 proxy. It also has methods mimicking the behaviour of useful v1 API
@@ -15,16 +15,16 @@ calls which did not make it into v2.
 ## Installation
 
 ```
-$ gem install wavefront-sdk
+$ gem install remotelock-sdk
 ```
 
 or to build locally,
 
 ```
-$ gem build wavefront-sdk.gemspec
+$ gem build remotelock-sdk.gemspec
 ```
 
-`wavefront-sdk` requires Ruby >= 2.7. All its dependencies are pure
+`remotelock-sdk` requires Ruby >= 2.7. All its dependencies are pure
 Ruby, right the way down, so a compiler should never be required to
 install it.
 
@@ -32,12 +32,12 @@ install it.
 
 The code is documented with [YARD](http://yardoc.org/) and
 automatically generated documentation is [available on
-rubydoc.info](http://www.rubydoc.info/gems/wavefront-sdk/).
+rubydoc.info](http://www.rubydoc.info/gems/remotelock-sdk/).
 
 ## Examples
 
-First, let's list the Wavefront proxies in our account. The `list()`
-method will return a `Wavefront::Response` object. This object has
+First, let's list the Remotelock proxies in our account. The `list()`
+method will return a `Remotelock::Response` object. This object has
 `status` and `response` methods. `status` always yields a structure
 containing `result`, `message` and `code` fields which can be
 inspected to ensure an API call was processed successfully.
@@ -52,10 +52,10 @@ you to the same place.
 ```ruby
 # Define our API endpoint. (This is not a valid token!)
 
-CREDS = { endpoint: 'metrics.wavefront.com',
+CREDS = { endpoint: 'metrics.remotelock.com',
           token: 'c7a1ff30-0dd8-fa60-e14d-f58f91bafc0e' }
 
-require 'wavefront-sdk/proxy'
+require 'remotelock-sdk/proxy'
 
 # You can pass in a Ruby logger object, and tell the SDK to be
 # verbose.
@@ -63,11 +63,11 @@ require 'wavefront-sdk/proxy'
 require 'logger'
 log = Logger.new(STDOUT)
 
-wf = Wavefront::User.new(CREDS, verbose: true, logger: log)
+wf = Remotelock::User.new(CREDS, verbose: true, logger: log)
 proxies = wf.list
 
 puts proxies.class
-# Wavefront::Response
+# Remotelock::Response
 
 # See how things went. How specific do you want to be?
 
@@ -107,7 +107,7 @@ Calling a method with the limit set to `:lazy` returns a lazy
 enumerable. Again, `offset` is the chunk size.
 
 ```ruby
-wf = Wavefront::Alert.new(creds.all)
+wf = Remotelock::Alert.new(creds.all)
 
 # The first argument is how many object to get with each API call,
 # the second gets us a lazy #Enumerable
@@ -124,22 +124,22 @@ configuration file. If you don't supply a file, defaults will be
 used. You can even override things with environment variables.
 
 ```ruby
-require 'wavefront-sdk/credentials'
+require 'remotelock-sdk/credentials'
 
-c = Wavefront::Credentials.new
+c = Remotelock::Credentials.new
 
 # Now use that to list the alerts in our account
 
-require 'wavefront-sdk/alert'
+require 'remotelock-sdk/alert'
 
-p Wavefront::Alert.new(c.creds).list
+p Remotelock::Alert.new(c.creds).list
 
 # To get proxy configuration, use the `proxy` method. This is
 # required by the Write class. You can also use c.all, which
 # includes proxy and API configuration.
 
-wf = Wavefront::Write.new(c.proxy)
-wf = Wavefront::Write.new(c.all)
+wf = Remotelock::Write.new(c.proxy)
+wf = Remotelock::Write.new(c.all)
 ```
 
 ### Queries
@@ -150,9 +150,9 @@ describe the time as a Ruby object, but could also use an epoch
 timestamp. The SDK happily converts between the two.
 
 ```ruby
-require 'wavefront-sdk/query'
+require 'remotelock-sdk/query'
 
-Wavefront::Query.new(CREDS).query(
+Remotelock::Query.new(CREDS).query(
   'ts("prod.www.host.tenant.physicalmem.usage")',
   :m,
   (Time.now - 600)
@@ -161,16 +161,16 @@ Wavefront::Query.new(CREDS).query(
 
 ### Sending Metrics
 
-The `Wavefront::Write` and `Wavefront::Distribution` classes lets
-you send points to Wavefront in a number of ways.
+The `Remotelock::Write` and `Remotelock::Distribution` classes lets
+you send points to Remotelock in a number of ways.
 
 #### Sending Points
 
-Use `Wavefront::Write` to send points. Points are described as an
+Use `Remotelock::Write` to send points. Points are described as an
 array of hashes. For example:
 
 ```ruby
-wf = Wavefront::Write.new(Wavefront::Credentials.new.proxy)
+wf = Remotelock::Write.new(Remotelock::Credentials.new.proxy)
 wf.write([{ path: 'dev.test.sdk', value: 10 }])
 ```
 
@@ -189,14 +189,14 @@ wf.write({ path:   'dev.test.sdk',
 As the example shows, if you are sending a single point, you can
 send a naked hash, omitting the array syntax.
 
-By default, `Wavefront::Write#write` will open a connection to
-Wavefront on each call, closing it after use.
+By default, `Remotelock::Write#write` will open a connection to
+Remotelock on each call, closing it after use.
 
 If you prefer to manage the connection yourself, supply `noauto:
 true` in the options hash when instantiating the `Write` class.
 
 ```ruby
-wf = Wavefront::Write.new(Wavefront::Credentials.new.proxy, noauto: true)
+wf = Remotelock::Write.new(Remotelock::Credentials.new.proxy, noauto: true)
 wf.open
 wf.write(path: 'dev.test.sdk', value: 10)
 wf.close
@@ -206,7 +206,7 @@ Alternatively, pass `false` as the second argument to `Write#write`.
 (This is the legacy method, kept in for backward compatibility.)
 
 ```ruby
-wf = Wavefront::Write.new(Wavefront::Credentials.new.proxy)
+wf = Remotelock::Write.new(Remotelock::Credentials.new.proxy)
 wf.open
 wf.write([{ path: 'dev.test.sdk', value: 10 }], false)
 wf.close
@@ -217,13 +217,13 @@ but other methods are supported via the `writer` option.
 
 ```ruby
 # To send points via the API
-wf = Wavefront::Write.new(Wavefront::Credentials.new.creds, writer: :api)
+wf = Remotelock::Write.new(Remotelock::Credentials.new.creds, writer: :api)
 
 # To send points via a local Unix socket
-wf = Wavefront::Write.new({ socket: '/tmp/wf_sock'}, { writer: :socket })
+wf = Remotelock::Write.new({ socket: '/tmp/wf_sock'}, { writer: :socket })
 
 # To send points over HTTP
-wf = Wavefront::Write.new(Wavefront::Credentials.new.creds, writer: :http)
+wf = Remotelock::Write.new(Remotelock::Credentials.new.creds, writer: :http)
 
 # Then call wf.write as before.
 ```
@@ -232,13 +232,13 @@ wf = Wavefront::Write.new(Wavefront::Credentials.new.creds, writer: :http)
 provides a `summary` object.
 
 ```ruby
-wf = Wavefront::Write.new(Wavefront::Credentials.new.proxy, verbose: true)
+wf = Remotelock::Write.new(Remotelock::Credentials.new.proxy, verbose: true)
 wf.write([{ path: 'dev.test.sdk', value: 11, tags: { tag1: 'mytag'} }])
 # SDK INFO: dev.test.sdk 11 source=box tag1="mytag"
 
-wf = Wavefront::Write.new(Wavefront::Credentials.new.proxy, debug: true)
+wf = Remotelock::Write.new(Remotelock::Credentials.new.proxy, debug: true)
 wf.write([{ path: 'dev.test.sdk', value: 11, tags: { tag1: 'mytag'} }])
-# SDK DEBUG: Connecting to wavefront:2878.
+# SDK DEBUG: Connecting to remotelock:2878.
 # SDK INFO: dev.test.sdk 11 source=box tag1="mytag"
 # SDK DEBUG: Closing connection to proxy.
 
@@ -256,19 +256,19 @@ exactly the same way as `Write#write`, and supports all the same
 options.
 
 If you try to send huge amounts of metrics in a single go,
-`Wavefront::Write` will break them up into smaller API-friendly
+`Remotelock::Write` will break them up into smaller API-friendly
 chunks.
 
 #### Sending Distributions
 
-Use the `Wavefront::Distribution` class to send distributions via a
-proxy. This is an extension of `Wavefront::Write`, so usage is
+Use the `Remotelock::Distribution` class to send distributions via a
+proxy. This is an extension of `Remotelock::Write`, so usage is
 almost the same. All you have to do differently is specify an
 interval size (`m`, `h`, or `d`), and use a distribution as your
 `value`. We give you methods to help with this.  For instance:
 
 ```ruby
-wf = Wavefront::Distribution.new(CREDS.proxy)
+wf = Remotelock::Distribution.new(CREDS.proxy)
 
 dist = wf.mk_distribution([7, 7, 7, 8, 8, 9, 10, 10])
 
@@ -282,7 +282,7 @@ p wf.write({ path: 'dev.test.dist', value: dist, interval: :m }).response
 
 #### Metric Helpers
 
-The `Wavefront::MetricHelper` class gives you simple ways to write
+The `Remotelock::MetricHelper` class gives you simple ways to write
 metrics to in-memory buffers, and flush those buffer whenever you see
 fit. It aims to be a little bit like Dropwizard.
 
@@ -291,9 +291,9 @@ instance, the source and timestamp are automatically sent. You can
 view the buffer at any time with the `buf` `attr_accessor`.
 
 ```ruby
-require 'wavefront-sdk/metric_helper'
+require 'remotelock-sdk/metric_helper'
 
-wf = Wavefront::MetricHelper.new(CREDS.proxy, verbose: true)
+wf = Remotelock::MetricHelper.new(CREDS.proxy, verbose: true)
 
 wf.gauge('my.gauge', 1)
 wf.gauge('my.gauge', 2, { tag1: 'val1' })
@@ -330,12 +330,12 @@ metric*, the timestamp being the time of the flush.
 
 You can also work with distributions. To do this, you must add
 `dist_port` to your options hash, giving the number of the proxy
-port listening for Wavefront format distributions. Numbers can be added
+port listening for Remotelock format distributions. Numbers can be added
 to distributions individually, or in an array. You must specify the
 distribution interval.
 
 ```ruby
-wf = Wavefront::MetricHelper.new(CREDS.proxy, { verbose: true, dist_port: 40000 })
+wf = Remotelock::MetricHelper.new(CREDS.proxy, { verbose: true, dist_port: 40000 })
 
 wf.dist('my.dist', :m, 10)
 wf.dist('my.dist', :m, 10)
