@@ -156,7 +156,7 @@ module RemoteLock
       make_call(mk_conn(path), :delete)
     end
 
-    # If we need to massage a raw response to fit what the RemoteLock::Response class expects 
+    # If we need to massage a raw response to fit what the RemoteLock::Response class expects
     # (I'm looking at you, 'User'), a class can provide a {#response_shim} method.
     # @param resp [Faraday::Response]
     # @return [String] body of response (JSON)
