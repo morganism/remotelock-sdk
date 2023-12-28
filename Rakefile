@@ -16,6 +16,3 @@ RuboCop::RakeTask.new(:rubocop) do |t|
   t.options = ['--display-cop-names']
 end
 
-YARD::Rake::YardocTask.new do |t|
-  t.files = ['lib/remotelock-sdk/*rb']
-end
