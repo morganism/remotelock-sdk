@@ -237,9 +237,7 @@ module RemoteLock
     def setup_endpoint(creds)
       validate_credentials(creds)
 
-      unless creds.key?(:agent) && creds[:agent]
-        creds[:agent] = "remotelock-sdk #{RL_SDK_VERSION}"
-      end
+      creds[:agent] = "remotelock-sdk #{RL_SDK_VERSION}" unless creds.key?(:agent) && creds[:agent]
 
       @net = { headers: headers(creds),
                scheme: opts[:scheme] || 'https',
