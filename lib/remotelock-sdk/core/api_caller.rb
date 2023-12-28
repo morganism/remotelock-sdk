@@ -86,7 +86,6 @@ module RemoteLock
     #   timeout -- after approximately this many seconds, return. It will be
     #     the first chunk *after* the given time
     # @return
-    #
     def get_stream(path, query = {}, opts = {})
       conn = flat_param_conn(path, query)
       verbosity(conn, :get, query)
