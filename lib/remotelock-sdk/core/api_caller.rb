@@ -21,7 +21,6 @@ module RemoteLock
     # @param creds [Hash] RemoteLock credentials
     # @param opts [Hash]
     # @return [Nil]
-    #
     def initialize(calling_class, creds = {}, opts = {})
       @calling_class = calling_class
       @opts          = opts
@@ -43,14 +42,10 @@ module RemoteLock
     # @param headers [Hash] additional headers
     # @param request_opts [Hash] Faraday request parameters
     # @return [URI::HTTPS]
-    #
     def mk_conn(path, headers = {}, opts = {})
-      url = format('%<scheme>s://%<endpoint>s%<path>s',
-                   scheme: net[:scheme],
-                   endpoint: net[:endpoint],
-                   path: [net[:api_base], path].uri_concat)
-      set_opts = { url: Addressable::URI.encode(url),
-                   headers: net[:headers].merge(headers) }
+      url = format('%<scheme>s://%<endpoint>s%<path>s', scheme: net[:scheme], endpoint: net[:endpoint],
+        path: [net[:api_base], path].uri_concat)
+      set_opts = { url: Addressable::URI.encode(url), headers: net[:headers].merge(headers) }
       Faraday.new(set_opts.merge(opts))
     end
 
@@ -63,7 +58,6 @@ module RemoteLock
     # @param request_opts [Hash] parameters to pass through to
     #   Faraday
     # @return [Hash] API response
-    #
     def get(path, query = {})
       make_call(mk_conn(path, {}), :get, nil, query)
     end
@@ -71,7 +65,6 @@ module RemoteLock
     # Had to introduce this for the RemoteLock::Dashboard#acls method, which uses a query string of multiple id=s.
     # By default Faraday only uses the last one. You must set the `params_encoder`. Rather than convolute the
     # existing logic, it was cleaner to add this method. Parameters are same as get.
-    #
     def get_flat_params(path, query = {})
       make_call(flat_param_conn(path, query), :get)
     end
@@ -87,7 +80,6 @@ module RemoteLock
     #   timeout -- after approximately this many seconds, return. It will be
     #     the first chunk *after* the given time
     # @return
-    #
     def get_stream(path, query = {}, opts = {})
       conn = flat_param_conn(path, query)
       verbosity(conn, :get, query)
@@ -124,12 +116,9 @@ module RemoteLock
     #   Objects will be converted to JSON
     # @param ctype [String] the content type to use when posting
     # @return [Hash] API response
-    #
     def post(path, body = nil, ctype = 'text/plain')
       body = body.to_json unless body.is_a?(String)
-      make_call(mk_conn(path,  'Content-Type': ctype,
-                               Accept: 'application/json'),
-                :post, nil, body)
+      make_call(mk_conn(path,  'Content-Type': ctype, Accept: 'application/json'), :post, nil, body)
     end
 
     # Make a PUT call to the RemoteLock API and return the result as a Ruby hash.
@@ -139,11 +128,8 @@ module RemoteLock
     # @param body [String] optional body text to post
     # @param ctype [String] the content type to use when putting
     # @return [Hash] API response
-    #
     def put(path, body = nil, ctype = 'application/json')
-      make_call(mk_conn(path,  'Content-Type': ctype,
-                               Accept: 'application/json'),
-                :put, nil, body.to_json)
+      make_call(mk_conn(path,  'Content-Type': ctype, Accept: 'application/json'), :put, nil, body.to_json)
     end
 
     # Make a DELETE call to the RemoteLock API and return the result as a Ruby hash.
@@ -151,7 +137,6 @@ module RemoteLock
     # @param path [String] path to be appended to the
     #   #net[:api_base] path.
     # @return [Hash] API response
-    #
     def delete(path)
       make_call(mk_conn(path), :delete)
     end
@@ -160,13 +145,8 @@ module RemoteLock
     # (I'm looking at you, 'User'), a class can provide a {#response_shim} method.
     # @param resp [Faraday::Response]
     # @return [String] body of response (JSON)
-    #
     def respond(resp)
-      body = if calling_class.respond_to?(:response_shim)
-               calling_class.response_shim(resp.body, resp.status)
-             else
-               resp.body
-             end
+      body = calling_class.respond_to?(:response_shim) ?  calling_class.response_shim(resp.body, resp.status) : resp.body
 
       return body if opts[:raw_response]
 
@@ -174,13 +154,10 @@ module RemoteLock
     end
 
     # Try to describe the actual HTTP calls we make. There's a bit of clumsy guesswork here
-    #
     def verbosity(conn, method, *args)
       return unless noop || verbose
 
-      log format('uri: %<method>s %<path>s',
-                 method: method.upcase,
-                 path: conn.url_prefix)
+      log format('uri: %<method>s %<path>s', method: method.upcase, path: conn.url_prefix)
 
       return unless args.last && !args.last.empty?
 
@@ -191,8 +168,7 @@ module RemoteLock
 
     def paginator_class(method)
       require_relative File.join('..', 'paginator', method.to_s)
-      Object.const_get(format('RemoteLock::Paginator::%<method>s',
-                              method: method.to_s.capitalize))
+      Object.const_get(format('RemoteLock::Paginator::%<method>s', method: method.to_s.capitalize))
     end
 
     # A dispatcher for making API calls. We now have three methods that do the real call,
@@ -229,10 +205,7 @@ module RemoteLock
 
       creds[:agent] = "remotelock-sdk #{RL_SDK_VERSION}" unless creds.key?(:agent) && creds[:agent]
 
-      @net = { headers: headers(creds),
-               scheme: opts[:scheme] || 'https',
-               endpoint: creds[:endpoint],
-               api_base: calling_class.api_path }
+      @net = { headers: headers(creds), scheme: opts[:scheme] || 'https', endpoint: creds[:endpoint], api_base: calling_class.api_path }
     end
 
     def headers(creds)
@@ -242,10 +215,7 @@ module RemoteLock
     end
 
     def validate_credentials(creds)
-      if calling_class.respond_to?(:validate_credentials)
-        calling_class.validate_credentials(creds)
-      else
-        _validate_credentials(creds)
+      calling_class.respond_to?(:validate_credentials) ? calling_class.validate_credentials(creds) : _validate_credentials(creds)
       end
     end
 
@@ -259,12 +229,7 @@ module RemoteLock
     end
 
     def flat_param_conn(path, query)
-      mk_conn(path,
-              {},
-              request: {
-                params_encoder: Faraday::FlatParamsEncoder
-              },
-              params: query)
+      mk_conn(path, {}, request: { params_encoder: Faraday::FlatParamsEncoder }, params: query)
     end
   end
 end
