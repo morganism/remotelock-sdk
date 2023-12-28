@@ -68,9 +68,9 @@ module RemoteLock
       make_call(mk_conn(path, {}), :get, nil, query)
     end
 
-    # Had to introduce this for the RemoteLock::Dashboard#acls method, which uses a query string of multiple id=s. 
-    # By default Faraday only uses the last one. You must set the `params_encoder`. Rather than convolute the existing logic, 
-    # it was cleaner to add this method. Parameters are same as get.
+    # Had to introduce this for the RemoteLock::Dashboard#acls method, which uses a query string of multiple id=s.
+    # By default Faraday only uses the last one. You must set the `params_encoder`. Rather than convolute the
+    # existing logic, it was cleaner to add this method. Parameters are same as get.
     #
     def get_flat_params(path, query = {})
       make_call(flat_param_conn(path, query), :get)
@@ -116,8 +116,7 @@ module RemoteLock
       Time.right_now + opts[:timeout] if opts[:timeout]&.positive?
     end
 
-    # Make a POST call to the RemoteLock API and return the result as
-    # a Ruby hash.
+    # Make a POST call to the RemoteLock API and return the result as a Ruby hash.
     #
     # @param path [String] path to be appended to the
     #   #net[:api_base] path.
@@ -133,8 +132,7 @@ module RemoteLock
                 :post, nil, body)
     end
 
-    # Make a PUT call to the RemoteLock API and return the result as
-    # a Ruby hash.
+    # Make a PUT call to the RemoteLock API and return the result as a Ruby hash.
     #
     # @param path [String] path to be appended to the
     #   #net[:api_base] path.
@@ -148,8 +146,7 @@ module RemoteLock
                 :put, nil, body.to_json)
     end
 
-    # Make a DELETE call to the RemoteLock API and return the result
-    # as a Ruby hash.
+    # Make a DELETE call to the RemoteLock API and return the result as a Ruby hash.
     #
     # @param path [String] path to be appended to the
     #   #net[:api_base] path.
@@ -159,9 +156,8 @@ module RemoteLock
       make_call(mk_conn(path), :delete)
     end
 
-    # If we need to massage a raw response to fit what the
-    # RemoteLock::Response class expects (I'm looking at you,
-    # 'User'), a class can provide a {#response_shim} method.
+    # If we need to massage a raw response to fit what the RemoteLock::Response class expects 
+    # (I'm looking at you, 'User'), a class can provide a {#response_shim} method.
     # @param resp [Faraday::Response]
     # @return [String] body of response (JSON)
     #
@@ -177,8 +173,7 @@ module RemoteLock
       RemoteLock::Response.new(body, resp.status, opts)
     end
 
-    # Try to describe the actual HTTP calls we make. There's a bit
-    # of clumsy guesswork here
+    # Try to describe the actual HTTP calls we make. There's a bit of clumsy guesswork here
     #
     def verbosity(conn, method, *args)
       return unless noop || verbose
@@ -200,8 +195,8 @@ module RemoteLock
                               method: method.to_s.capitalize))
     end
 
-    # A dispatcher for making API calls. We now have three methods
-    # that do the real call, two of which live inside the requisite
+    # A dispatcher for making API calls. We now have three methods that do the real call,
+    # two of which live inside the requisite
     # RemoteLock::Paginator class
     # @raise [Faraday::ConnectionFailed] if cannot connect to
     #   endpoint
