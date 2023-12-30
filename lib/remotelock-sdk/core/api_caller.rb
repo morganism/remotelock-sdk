@@ -258,4 +258,5 @@ module RemoteLock
               params: query)
     end
   end
+  # rubocop:enable Metrics/ClassLength
 end
