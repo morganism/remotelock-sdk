@@ -11,6 +11,7 @@ require_relative '../stdlib/time'
 module RemoteLock
   #
   # Constructs and makes API calls to RemoteLock.
+  # rubocop:disable Metrics/ClassLength
   #
   class ApiCaller
     include RemoteLock::Mixins
