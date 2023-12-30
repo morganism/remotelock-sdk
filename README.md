@@ -70,6 +70,7 @@ By default (because it's the default behaviour of the API),
 all API classes (except `user`) will only return blocks of results
 when you ask for a list of objects.
 
+
 You can set an offset and a limit when you list, but setting the
 limit to the magic value `:all` will return all items, without you
 having to deal with pagination. When you do that, `offset` is repurposed as
