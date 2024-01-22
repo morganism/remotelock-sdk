@@ -12,6 +12,10 @@ features such as credential management, and writing points through a
 proxy. It also has methods mimicking the behaviour of useful v1 API
 calls which did not make it into v2.
 
+## Prerequisites
+
+- you'll need a physical device. i.e. a keyless doorlock by [RemoteLock](https://remotelock.com/hardware/locks-we-support/) great for AirBnB or your own residence. This system has changed my relationship to keys and how I allow access to my house. Bonmarché !
+
 ## Installation
 
 ```
