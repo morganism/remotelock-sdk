@@ -16,6 +16,9 @@ calls which did not make it into v2.
 
 - you'll need a physical device. i.e. a keyless doorlock by [RemoteLock](https://remotelock.com/hardware/locks-we-support/) great for AirBnB or your own residence. This system has changed my relationship to keys and how I allow access to my house. Bonmarché !
 
+- and a developer account [RemoteLock Developers](https://developer.remotelock.com/users/sign_in) . Create your OAuth application, recieve your client secret and id and you're good to go.
+  
+
 ## Installation
 
 ```
