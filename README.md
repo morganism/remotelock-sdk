@@ -90,8 +90,10 @@ the number of results fetched with each call to the API.
 Calling a method with the limit set to `:lazy` returns a lazy
 enumerable. Again, `offset` is the chunk size.
 
+Creating a new [AccessUser](https://developer.remotelock.com/api/docs#access-persons) :
+
 ```ruby
-rl = Remotelock::[AccessUser](https://developer.remotelock.com/api/docs#access-persons).new(creds.all)
+rl = Remotelock::AccessUser.new(creds.all)
 
 # The first argument is how many object to get with each API call,
 # the second gets us a lazy #Enumerable
