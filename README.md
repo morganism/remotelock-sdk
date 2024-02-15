@@ -16,7 +16,7 @@ calls which did not make it into v2.
 
 - you'll need a physical device. i.e. a keyless doorlock by [RemoteLock](https://remotelock.com/hardware/locks-we-support/) great for AirBnB or your own residence. This system has changed my relationship to keys and how I allow access to my house. Bonmarché !
 
-- and a developer account [RemoteLock Developers](https://developer.remotelock.com/users/sign_in) . Create your OAuth application, recieve your client secret and id and you're good to go.
+- and a developer account [RemoteLock Developers](https://developer.remotelock.com/users/sign_in) . Create your [OAuth application](https://developer.remotelock.com/oauth/applications), receive your client secret and id and you're good to go.
 
 - ruby ! this is a ruby application
 
@@ -91,7 +91,7 @@ Calling a method with the limit set to `:lazy` returns a lazy
 enumerable. Again, `offset` is the chunk size.
 
 ```ruby
-rl = Remotelock::AccessUser.new(creds.all)
+rl = Remotelock::[AccessUser](https://developer.remotelock.com/api/docs#access-persons).new(creds.all)
 
 # The first argument is how many object to get with each API call,
 # the second gets us a lazy #Enumerable
